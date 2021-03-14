@@ -1,0 +1,46 @@
+
+import bme280
+import RPi.GPIO as GPIO
+import datetime
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+pinHumidificador = 5
+pinVentilador = 6
+
+GPIO.setup(pinVentilador, GPIO.OUT)
+GPIO.setup(pinHumidificador, GPIO.OUT)
+
+temperature,pressure,humidity = bme280.readBME280All()
+
+maxHum = 60
+minHum = 50
+
+while True:
+    temperature,pressure,humidity  = bme280.readBME280All()
+    if humidity < (minHum - hist)  :
+         GPIO.output(pinHumidificador, False)
+         GPIO.output(pinVentilador, True)
+         print "Humidificador Encendido"
+         print "Humidity : ", humidity, "%"
+         time.sleep(100)
+
+
+    elif humidity >(maxHum + hist) :
+        GPIO.output(pinVentilador, False)
+        print "Humedad alta, ventilador encendido"
+        print "Humidity : ", humidity, "%"
+        time.sleep(10)
+
+    else:
+        GPIO.output(pinVentilador, True)
+        GPIO.output(pinHumidificador, True)
+        print "Humidificador apagado, ventilador apagado"
+        print "Humidity : ", humidity, "%"
+        time.sleep(120)
+
+
+
+
+
